@@ -18,8 +18,8 @@ namespace ExampleNet45
             var t = Task.Run(async () => {
                 MChatScanPaymentBuilder paymentBuilder = new MChatScanPaymentBuilder();
                 paymentBuilder.domain = "developer.mongolchat.com";
-                paymentBuilder.apiKey = "ftrR8Cs5vZrP8VuLYnea/0dlrlpTptywAFEA78MR9z8=";
-                paymentBuilder.workerKey = "dcac86535d12bd1413fe3d9a4cceac721f1ef94b5d0235a35b7d94af688ab0ff";
+                paymentBuilder.apiKey = "";
+                paymentBuilder.workerKey = "";
                 MChatScanPayment payment = paymentBuilder.Build();
                 MChatGenerateQRCodeRequestBody body = new MChatGenerateQRCodeRequestBody();
                 body.totalPrice = 7;
