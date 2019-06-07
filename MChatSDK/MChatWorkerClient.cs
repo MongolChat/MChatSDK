@@ -14,7 +14,7 @@ namespace MChatSDK
         private static readonly HttpClient httpClient = new HttpClient();
         private static readonly String domain = "developer.mongolchat.com";
 
-        public delegate void StateChanged(MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, MChatResponse response);
+        public delegate void StateChanged(MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse response);
 
         public event StateChanged stateChanged;
 
@@ -82,7 +82,7 @@ namespace MChatSDK
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
                 MChatResponseGenerateQRCode mChatResponseGenerateQRCode = JsonConvert.DeserializeObject<MChatResponseGenerateQRCode>(responseBody);
-                ConnectToBusinessNotificationService(mChatResponseGenerateQRCode.generatedQRCode);
+                ConnectToBusinessNotificationService(mChatResponseGenerateQRCode.generatedQRCode, mChatResponseGenerateQRCode.dynamicLink);
                 return mChatResponseGenerateQRCode;
             }
             else
@@ -171,39 +171,39 @@ namespace MChatSDK
             }
         }
 
-        public void ConnectToBusinessNotificationService(String generatedQRCode)
+        public void ConnectToBusinessNotificationService(String generatedQRCode, String dynamicLink)
         {
 
             this.businessNotificationService.connectionState = (MChatBusinessNotificationService service, BNSProtocolConnectionState state) => {
                 if (state == BNSProtocolConnectionState.Connected)
                 {
-                    this.stateChanged?.Invoke(this, BNSState.Connected, generatedQRCode, null);
+                    this.stateChanged?.Invoke(this, BNSState.Connected, generatedQRCode, dynamicLink,  null);
 
                 }
                 else if (state == BNSProtocolConnectionState.Disconnected)
                 {
-                    this.stateChanged?.Invoke(this, BNSState.Disconnected, generatedQRCode, null);
+                    this.stateChanged?.Invoke(this, BNSState.Disconnected, generatedQRCode, dynamicLink, null);
                 }
                 else if (state == BNSProtocolConnectionState.Timeout)
                 {
                     MChatResponse timeoutRes = new MChatResponse();
                     timeoutRes.code = 408;
                     timeoutRes.message = "Time Out";
-                    this.stateChanged?.Invoke(this, BNSState.ErrorOccured, generatedQRCode, timeoutRes);
+                    this.stateChanged?.Invoke(this, BNSState.ErrorOccured, generatedQRCode, dynamicLink, timeoutRes);
                 }
             };
             this.businessNotificationService.protocolResponse = (BNSProtocolState state, MChatResponse res) => {
                 if (state == BNSProtocolState.Registration && res.code == 200)
                 {
-                    this.stateChanged?.Invoke(this, BNSState.Ready, generatedQRCode, res);
+                    this.stateChanged?.Invoke(this, BNSState.Ready, generatedQRCode, dynamicLink, res);
                 }
                 else if (state == BNSProtocolState.PaymentNotification && res.code == 200)
                 {
-                    this.stateChanged?.Invoke(this, BNSState.PaymentSuccessful, generatedQRCode, res);
+                    this.stateChanged?.Invoke(this, BNSState.PaymentSuccessful, generatedQRCode, dynamicLink, res);
                 }
                 else if (res.code != 200)
                 {
-                    this.stateChanged?.Invoke(this, BNSState.ErrorOccured, generatedQRCode, res);
+                    this.stateChanged?.Invoke(this, BNSState.ErrorOccured, generatedQRCode, dynamicLink, res);
                 }
             };
             Thread connectionThread = new Thread(() =>
