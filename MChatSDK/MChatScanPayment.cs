@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 namespace MChatSDK
 {
 
-    [Obsolete("MChatGenerateQRCodeRequestBody is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
+    //[Obsolete("MChatGenerateQRCodeRequestBody is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatGenerateQRCodeRequestBody
     {
         public double totalPrice; 
@@ -24,7 +24,7 @@ namespace MChatSDK
     }
 
 
-    [Obsolete("MChatGenerateQRCodeBodyPrivate is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
+    //[Obsolete("MChatGenerateQRCodeBodyPrivate is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     class MChatGenerateQRCodeBodyPrivate : MChatRequest
     {
         [JsonProperty("total_price")]
@@ -56,7 +56,7 @@ namespace MChatSDK
         }
     }
 
-    [Obsolete("MChatScanPaymentBuilder is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
+    //[Obsolete("MChatScanPaymentBuilder is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatScanPaymentBuilder
     {
         public String domain;
@@ -84,7 +84,7 @@ namespace MChatSDK
         ErrorOccured
     }
 
-    [Obsolete("MChatScanPayment is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
+    //[Obsolete("MChatScanPayment is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatScanPayment
     {
 

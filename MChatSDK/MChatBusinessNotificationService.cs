@@ -96,7 +96,7 @@ namespace MChatSDK
             catch (Exception e)
             {
                 disconnected();
-                Console.WriteLine(e.ToString());
+                //Console.WriteLine(e.ToString());
             }
         }
 
@@ -194,14 +194,18 @@ namespace MChatSDK
             connectionState?.Invoke(this, BNSProtocolConnectionState.Connected);
             Task.Run(async () => {
                 await Task.Delay(this.configBuilder.timeout);
-                connectionState?.Invoke(this, BNSProtocolConnectionState.Timeout);
-                Disconnect();
+                if (connectionState != null)
+                {
+                    connectionState?.Invoke(this, BNSProtocolConnectionState.Timeout);
+                    Disconnect();
+                }
             });
         }
 
         private void disconnected()
         {
             connectionState?.Invoke(this, BNSProtocolConnectionState.Disconnected);
+            connectionState = null;
         }
 
         public void Disconnect()
