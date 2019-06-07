@@ -9,9 +9,11 @@ using Newtonsoft.Json;
 
 namespace MChatSDK
 {
+
+    [Obsolete("MChatGenerateQRCodeRequestBody is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatGenerateQRCodeRequestBody
     {
-        public double totalPrice;
+        public double totalPrice; 
         public ArrayList products = new ArrayList();
         public String title = "";
         public String subTitle = "";
@@ -21,13 +23,14 @@ namespace MChatSDK
         public String ttd = "";
     }
 
-    class MChatGenerateQRCodeBodyPrivate
+
+    [Obsolete("MChatGenerateQRCodeBodyPrivate is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
+    class MChatGenerateQRCodeBodyPrivate : MChatRequest
     {
         [JsonProperty("total_price")]
         public double totalPrice;
         [JsonProperty("products")]
         public ArrayList products = new ArrayList();
-
         [JsonProperty("title")]
         public String title = "";
         [JsonProperty("sub_title")]
@@ -51,52 +54,9 @@ namespace MChatSDK
             this.nhat = body.nhat;
             this.ttd = body.ttd;
         }
-
     }
 
-    public class MChatProduct
-    {
-        [JsonProperty("product_name")]
-        public String name;
-        [JsonProperty("price")]
-        public double unitPrice;
-        [JsonProperty("quantity")]
-        public int quantity;
-        [JsonProperty("tag")]
-        public String tag = "";
-    }
-
-    class MChatCheckQRCodePaymentRequestBody
-    {
-        [JsonProperty("qr")]
-        public String qrCode = "";
-    }
-
-    public class MChatResponse
-    {
-        [JsonProperty("code")]
-        public int code;
-        [JsonProperty("message")]
-        public String message;
-
-        public override string ToString()
-        {
-            return "code: " + code + "\nmessage: " + message;
-        }
-    }
-
-    public class MChatResponseGenerateQRCode : MChatResponse
-    {
-        [JsonProperty("qr")]
-        public String generatedQRCode;
-    }
-
-    public class MChatResponseCheckState : MChatResponse
-    {
-        [JsonProperty("status")]
-        public String status;
-    }
-
+    [Obsolete("MChatScanPaymentBuilder is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatScanPaymentBuilder
     {
         public String domain;
@@ -124,6 +84,7 @@ namespace MChatSDK
         ErrorOccured
     }
 
+    [Obsolete("MChatScanPayment is deprecated, please use MChatWorkerConfiguration and MChatWorkerClient instead.", true)]
     public class MChatScanPayment
     {
 

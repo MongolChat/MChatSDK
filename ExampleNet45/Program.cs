@@ -15,27 +15,100 @@ namespace ExampleNet45
             //configBuilder.port = 8790;
             //MChatBusinessNotificationService mchatservice =  configBuilder.build();
             //mchatservice.connect("Test");
-            var t = Task.Run(async () => {
-                MChatScanPaymentBuilder paymentBuilder = new MChatScanPaymentBuilder();
-                paymentBuilder.domain = "developer.mongolchat.com";
-                paymentBuilder.apiKey = "";
-                paymentBuilder.workerKey = "";
-                MChatScanPayment payment = paymentBuilder.Build();
-                MChatGenerateQRCodeRequestBody body = new MChatGenerateQRCodeRequestBody();
-                body.totalPrice = 7;
-                body.title = "Laviva";
-                body.subTitle = "Welcome to Laviva";
-                body.noat = "200";
-                body.nhat = "0";
-                body.ttd = "ttd";
+            //var t = Task.Run(async () => {
+            //    MChatScanPaymentBuilder paymentBuilder = new MChatScanPaymentBuilder();
+            //    paymentBuilder.domain = "developer.mongolchat.com";
+            //    paymentBuilder.apiKey = "";
+            //    paymentBuilder.workerKey = "";
+            //    MChatScanPayment payment = paymentBuilder.Build();
+            //    MChatGenerateQRCodeRequestBody body = new MChatGenerateQRCodeRequestBody();
+            //    body.totalPrice = 7;
+            //    body.title = "Laviva";
+            //    body.subTitle = "Welcome to Laviva";
+            //    body.noat = "200";
+            //    body.nhat = "0";
+            //    body.ttd = "ttd";
+            //    ArrayList products = new ArrayList();
+            //    MChatProduct product = new MChatProduct();
+            //    product.name = "Coca Cola";
+            //    product.quantity = 1;
+            //    product.unitPrice = 2000;
+            //    products.Add(product);
+            //    body.products = products;
+            //MChatResponseGenerateQRCode response = await payment.GenerateNewCodeAsync(body, (MChatScanPayment scanPayment, BNSState state, String generatedQRCode, MChatResponse res) =>
+            //{
+            //    if (state == BNSState.Ready)
+            //    {
+            //            // Succesfully connected and ready to receive notification from notification service
+            //            Console.WriteLine("Ready to display QRCode: " + generatedQRCode);
+            //    }
+            //    else if (state == BNSState.Connected)
+            //    {
+            //            // Successfully connected to notification service
+            //            Console.WriteLine("Connected: " + res);
+            //    }
+            //    else if (state == BNSState.Disconnected)
+            //    {
+            //            // Disconnected from notification service
+            //            Console.WriteLine("Disconnected: " + res);
+            //    }
+            //    else if (state == BNSState.PaymentSuccessful)
+            //    {
+            //            // Got response from payment notification service
+            //            Console.WriteLine("PaymentSuccesfull: " + generatedQRCode + "\n" + res);
+            //        var t2 = Task.Run(async () =>
+            //        {
+            //            MChatResponseCheckState responseStateSuccesfull = await payment.CheckQRCodePaymentState(generatedQRCode);
+            //            Console.WriteLine(responseStateSuccesfull.ToString());
+            //        });
+            //    }
+            //    else if (state == BNSState.ErrorOccured)
+            //    {
+            //            // Error Occured when connection notification service
+            //            Console.WriteLine("ErrorOccured: " + res);
+            //    }
+            //    if (res != null)
+            //    {
+            //        Console.WriteLine(res.ToString());
+            //    }
+            //});
+            //    Console.WriteLine(response.ToString());
+
+            //    MChatResponseCheckState responseState = await payment.CheckQRCodePaymentState("pay://71698b23f949e980fdc842e84879a68a59e5970047f3feb9720eb81894a9646b");
+            //    Console.WriteLine(responseState.ToString());
+            //});
+            //try
+            //{
+            //    t.Wait();
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //}
+            ////Console.WriteLine("Start");
+            //var t1 = Task.Run(async () =>
+            //{
+            //    await Task.Delay(1200000);
+            //});
+            //t1.Wait();
+
+            MChatWorkerConfiguration.Instance.Configure("7QhJgkkjStjue8SIsWVqQD2EMgRm8CzsPifTVhm4Q0M=", MChatWorkerConfiguration.MChatWorkerType.MChatWorkerKey, "1bcc1e71123a255541923661aab62a7fa7a17b607045320ce05c04de400566f7");
+            Console.WriteLine(MChatWorkerConfiguration.Instance.showInfo);
+            MChatWorkerClient client = new MChatWorkerClient();
+            var t1 = Task.Run(async () =>
+            {
+                MChatRequestReceipt receipt = new MChatRequestReceipt();
+                receipt.totalPrice = 2;
+                receipt.title = "Laviva";
+                receipt.subTitle = "Welcome to Laviva";
+                receipt.noat = "20";
+                receipt.nhat = "0";
+                receipt.ttd = "ttd";
                 ArrayList products = new ArrayList();
-                MChatProduct product = new MChatProduct();
-                product.name = "Coca Cola";
-                product.quantity = 1;
-                product.unitPrice = 2000;
-                products.Add(product);
-                body.products = products;
-                MChatResponseGenerateQRCode response = await payment.GenerateNewCodeAsync(body, (MChatScanPayment scanPayment, BNSState state, String generatedQRCode, MChatResponse res) =>
+                products.Add(new MChatProduct("Coca Cola", 100, 1));
+                products.Add(new MChatProduct("Hiam", 1000, 1));
+                receipt.products = products;
+                MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, MChatResponse res) =>
                 {
                     if (state == BNSState.Ready)
                     {
@@ -58,8 +131,8 @@ namespace ExampleNet45
                         Console.WriteLine("PaymentSuccesfull: " + generatedQRCode + "\n" + res);
                         var t2 = Task.Run(async () =>
                         {
-                            MChatResponseCheckState responseStateSuccesfull = await payment.CheckQRCodePaymentState(generatedQRCode);
-                            Console.WriteLine(responseStateSuccesfull.ToString());
+                            MChatResponseCheckStatus responseStatus = await client.CheckQRCodePaymentStatus(generatedQRCode);
+                            Console.WriteLine(responseStatus.ToString());
                         });
                     }
                     else if (state == BNSState.ErrorOccured)
@@ -72,25 +145,24 @@ namespace ExampleNet45
                         Console.WriteLine(res.ToString());
                     }
                 });
-                Console.WriteLine(response.ToString());
+                //MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "test"));
+                //Console.WriteLine(responseCharge.ToString());
+                //MChatResponseGenerateQRCode responseGenerateQRCode = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false));
+                //Console.WriteLine(responseGenerateQRCode.ToString());
+                //MChatResponseCheckStatus responseStatus = await client.CheckQRCodePaymentStatus(responseGenerateQRCode.generatedQRCode);
+                //Console.WriteLine(responseStatus.ToString());
 
-                MChatResponseCheckState responseState = await payment.CheckQRCodePaymentState("pay://71698b23f949e980fdc842e84879a68a59e5970047f3feb9720eb81894a9646b");
-                Console.WriteLine(responseState.ToString());
-            });
-            try
-            {
-                t.Wait();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            //Console.WriteLine("Start");
-            var t1 = Task.Run(async () =>
-            {
-                await Task.Delay(1200000);
+                //MChatResponseTransactionList responseTransactionList = await client.GetTransactionList(0, 20);
+                //Console.WriteLine(responseTransactionList.ToString());
+
+                //MChatResponseTransactionDetail responseTransactionDetail = await client.GetTransactionDetail("IBNK-563101");
+                //Console.WriteLine(responseTransactionDetail.ToString());
+
+                //MChatResponse updateResponse = await client.UpdateTransaction(new MChatRequestUpdateTransaction("IBNK-563101", "ddtd", "billType", "lotteryId", "qrCode"));
+                //Console.WriteLine(updateResponse.ToString());
             });
             t1.Wait();
+            Console.ReadLine();
         }
     }
 }
