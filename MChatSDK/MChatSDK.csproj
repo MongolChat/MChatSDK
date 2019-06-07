@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>MChat LLC</Company>
     <PackageId>mchat.sdk</PackageId>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <Authors>MChat LLC</Authors>
     <Description>SDK for mchat developers</Description>
     <PackageLicenseExpression />

@@ -81,7 +81,7 @@ ArrayList products = new ArrayList();
 products.Add(new MChatProduct("Coca Cola", 100, 1));
 products.Add(new MChatProduct("Hiam", 1000, 1));
 receipt.products = products;
-MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, MChatResponse res) =>
+MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
 {
     if (state == BNSState.Ready)
     {
