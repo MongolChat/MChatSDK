@@ -57,10 +57,12 @@ namespace MChatSDK
     {
         [JsonProperty("status")]
         public String status;
+        [JsonProperty("id")]
+        public String transactionID;
 
         public override string ToString()
         {
-            return base.ToString() + "\nstatus: " + status;
+            return base.ToString() + "\nstatus: " + status + "\transactionID: " + transactionID;
         }
     }
 
