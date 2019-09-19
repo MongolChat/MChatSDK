@@ -188,4 +188,15 @@ namespace MChatSDK
             this.qrCode = qrCode;
         }
     }
+
+    public class MChatRequestRefundTransaction : MChatRequest
+    {
+        [JsonProperty("id")]
+        public String transactionID;
+
+        public MChatRequestRefundTransaction(String transactionID)
+        {
+            this.transactionID = transactionID;
+        }
+    }
 }

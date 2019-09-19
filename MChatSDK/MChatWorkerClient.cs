@@ -131,6 +131,24 @@ namespace MChatSDK
             }
         }
 
+        public async Task<MChatResponse> RefundTransaction(String transactionID)
+        {
+            MChatRequestRefundTransaction requestBody = new MChatRequestRefundTransaction(transactionID);
+            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/transaction/refund", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponse mChatResponse = JsonConvert.DeserializeObject<MChatResponse>(responseBody);
+                return mChatResponse;
+            }
+            else
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponse mChatResponse = JsonConvert.DeserializeObject<MChatResponse>(responseBody);
+                return mChatResponse;
+            }
+        }
+
         public async Task<MChatResponseTransactionList> GetTransactionList(int page, int count)
         {
             return await this.GetTransactionList(page, count, null);
