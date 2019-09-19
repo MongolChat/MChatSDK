@@ -98,7 +98,7 @@ namespace ExampleNet45
             var t1 = Task.Run(async () =>
             {
                 MChatRequestReceipt receipt = new MChatRequestReceipt();
-                receipt.totalPrice = 2;
+                receipt.totalPrice = 20;
                 receipt.title = "Laviva";
                 receipt.subTitle = "Welcome to Laviva";
                 receipt.noat = "20";
@@ -108,45 +108,46 @@ namespace ExampleNet45
                 products.Add(new MChatProduct("Coca Cola", 100, 1));
                 products.Add(new MChatProduct("Hiam", 1000, 1));
                 receipt.products = products;
-                MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
-                {
-                    if (state == BNSState.Ready)
-                    {
-                        // Succesfully connected and ready to receive notification from notification service
-                        Console.WriteLine("Ready to display QRCode: " + generatedQRCode);
-                    }
-                    else if (state == BNSState.Connected)
-                    {
-                        // Successfully connected to notification service
-                        Console.WriteLine("Connected: " + res);
-                    }
-                    else if (state == BNSState.Disconnected)
-                    {
-                        // Disconnected from notification service
-                        Console.WriteLine("Disconnected: " + res);
-                    }
-                    else if (state == BNSState.PaymentSuccessful)
-                    {
-                        // Got response from payment notification service
-                        Console.WriteLine("PaymentSuccesfull: " + generatedQRCode + "\n" + res);
-                        var t2 = Task.Run(async () =>
-                        {
-                            MChatResponseCheckStatus responseStatus = await client.CheckQRCodePaymentStatus(generatedQRCode);
-                            Console.WriteLine(responseStatus.ToString());
-                        });
-                    }
-                    else if (state == BNSState.ErrorOccured)
-                    {
-                        // Error Occured when connection notification service
-                        Console.WriteLine("ErrorOccured: " + res);
-                    }
-                    if (res != null)
-                    {
-                        Console.WriteLine(res.ToString());
-                    }
-                });
-                //MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "test"));
-                //Console.WriteLine(responseCharge.ToString());
+                //MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
+                //{
+                //    if (state == BNSState.Ready)
+                //    {
+                //        // Succesfully connected and ready to receive notification from notification service
+                //        Console.WriteLine("Ready to display QRCode: " + generatedQRCode);
+                //    }
+                //    else if (state == BNSState.Connected)
+                //    {
+                //        // Successfully connected to notification service
+                //        Console.WriteLine("Connected: " + res);
+                //    }
+                //    else if (state == BNSState.Disconnected)
+                //    {
+                //        // Disconnected from notification service
+                //        Console.WriteLine("Disconnected: " + res);
+                //    }
+                //    else if (state == BNSState.PaymentSuccessful)
+                //    {
+                //        // Got response from payment notification service
+                //        Console.WriteLine("PaymentSuccesfull: " + generatedQRCode + "\n" + res);
+                //        var t2 = Task.Run(async () =>
+                //        {
+                //            MChatResponseCheckStatus responseStatus = await client.CheckQRCodePaymentStatus(generatedQRCode);
+                //            Console.WriteLine(responseStatus.ToString());
+                //        });
+                //    }
+                //    else if (state == BNSState.ErrorOccured)
+                //    {
+                //        // Error Occured when connection notification service
+                //        Console.WriteLine("ErrorOccured: " + res);
+                //    }
+                //    if (res != null)
+                //    {
+                //        Console.WriteLine(res.ToString());
+                //    }
+                //});
+                //DEWA-211973
+                MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "460781665920058254"));
+                Console.WriteLine(responseCharge.ToString());
                 //MChatResponseGenerateQRCode responseGenerateQRCode = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false));
                 //Console.WriteLine(responseGenerateQRCode.ToString());
                 //MChatResponseCheckStatus responseStatus = await client.CheckQRCodePaymentStatus(responseGenerateQRCode.generatedQRCode);
@@ -160,6 +161,9 @@ namespace ExampleNet45
 
                 //MChatResponse updateResponse = await client.UpdateTransaction(new MChatRequestUpdateTransaction("IBNK-563101", "ddtd", "billType", "lotteryId", "qrCode"));
                 //Console.WriteLine(updateResponse.ToString());
+
+                MChatResponse refundResponse = await client.RefundTransaction("YAJS-619871");
+                Console.WriteLine(refundResponse.ToString());
             });
             t1.Wait();
             Console.ReadLine();
