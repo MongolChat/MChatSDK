@@ -11,7 +11,7 @@ namespace MChatSDK
 {
     public class MChatWorkerClient
     {
-        private static readonly bool env_test = true;
+        private static readonly bool env_test = false;
         private static readonly HttpClient httpClient = new HttpClient();
         private static readonly String domain = env_test ? "test.mongolchat.com" : "developer.mongolchat.com";
 

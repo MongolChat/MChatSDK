@@ -121,7 +121,6 @@ namespace MChatSDK
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Response: " + responseBody);
                 mChatResponseGenerateQRCode = JsonConvert.DeserializeObject<MChatResponseGenerateQRCode>(responseBody);
                 ConnectToBusinessNotificationService();
                 return mChatResponseGenerateQRCode;
@@ -188,7 +187,6 @@ namespace MChatSDK
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
                 MChatResponseCheckState mChatResponse = JsonConvert.DeserializeObject<MChatResponseCheckState>(responseBody);
                 return mChatResponse;
             }
