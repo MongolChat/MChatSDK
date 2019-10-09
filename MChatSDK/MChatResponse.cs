@@ -21,10 +21,14 @@ namespace MChatSDK
     {
         [JsonProperty("id")]
         public String transactionID;
+        [JsonProperty("who_paid")]
+        public String whoPaid;
+        [JsonProperty("user_ref_id")]
+        public String userRefID;
 
         public override string ToString()
         {
-            return base.ToString() + "\ntransaction ID: " + transactionID;
+            return base.ToString() + "\ntransaction ID: " + transactionID + "\nwho paid: " + whoPaid + "\nuser ref ID: " + userRefID;
         }
     }
 
@@ -33,7 +37,7 @@ namespace MChatSDK
         [JsonProperty("dynamic_link")]
         public String dynamicLink;
         [JsonProperty("qr")]
-        public String generatedQRCode; 
+        public String generatedQRCode;
 
         public override string ToString()
         {
@@ -49,6 +53,17 @@ namespace MChatSDK
         public override string ToString()
         {
             return base.ToString() + "\nstatus: " + status;
+        }
+    }
+
+    public class MChatResponseCheckTransactionByRefNumber : MChatResponse
+    {
+        [JsonProperty("id")]
+        public String transactionID;
+
+        public override string ToString()
+        {
+            return base.ToString() + "\transactionID: " + transactionID;
         }
     }
 
@@ -187,6 +202,22 @@ namespace MChatSDK
         public override string ToString()
         {
             return base.ToString() + "\ntransactionID: " + transactionID + "\nproducts: " + products.Count;
+        }
+    }
+
+    public class MChatResponseSettlement : MChatResponse
+    {
+        [JsonProperty("total")]
+        public double total;
+        [JsonProperty("transaction_count")]
+        public int transactionCount;
+        [JsonProperty("total_refund")]
+        public Double totalRefund;
+        [JsonProperty("refund_transaction_count")]
+        public Double refundTransactionCount;
+        public override string ToString()
+        {
+            return base.ToString() + "\ntotal: " + total + "\transactionCount: " + transactionCount + "\ntotalRefund: " + totalRefund + "\nrefundTransactionCount: " + refundTransactionCount;
         }
     }
 }

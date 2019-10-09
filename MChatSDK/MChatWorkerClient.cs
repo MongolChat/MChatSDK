@@ -11,8 +11,9 @@ namespace MChatSDK
 {
     public class MChatWorkerClient
     {
+        private static readonly bool env_test = true;
         private static readonly HttpClient httpClient = new HttpClient();
-        private static readonly String domain = "developer.mongolchat.com";
+        private static readonly String domain = env_test ? "test.mongolchat.com" : "developer.mongolchat.com";
 
         public delegate void StateChanged(MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse response);
 
@@ -33,7 +34,7 @@ namespace MChatSDK
             httpClient.DefaultRequestHeaders.Add("Api-Key", MChatWorkerConfiguration.Instance.apiKey);
 
             MChatBusinessNotificationServiceBuilder builder = new MChatBusinessNotificationServiceBuilder();
-            builder.domain = "biznot.mongolchat.com";
+            builder.domain = env_test ? "test.mongolchat.com" : "biznot.mongolchat.com";
             builder.port = 8790;
             builder.apiKey = MChatWorkerConfiguration.Instance.apiKey;
             builder.timeout = MChatWorkerConfiguration.Instance.bnsTimeout == 0 ? 120000 : MChatWorkerConfiguration.Instance.bnsTimeout;
@@ -90,6 +91,22 @@ namespace MChatSDK
                 var responseBody = await response.Content.ReadAsStringAsync();
                 MChatResponseGenerateQRCode mChatResponseGenerateQRCode = JsonConvert.DeserializeObject<MChatResponseGenerateQRCode>(responseBody);
                 return mChatResponseGenerateQRCode;
+            }
+        }
+        public async Task<MChatResponseCheckTransactionByRefNumber> CheckTransactionByRefNumber(String referenceNumber)
+        {
+            var response = await httpClient.GetAsync("https://" + domain + "/v1/api/worker/transaction/check/ref/" + referenceNumber);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponseCheckTransactionByRefNumber mChatResponse = JsonConvert.DeserializeObject<MChatResponseCheckTransactionByRefNumber>(responseBody);
+                return mChatResponse;
+            }
+            else
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponseCheckTransactionByRefNumber mChatResponse = JsonConvert.DeserializeObject<MChatResponseCheckTransactionByRefNumber>(responseBody);
+                return mChatResponse;
             }
         }
 
@@ -149,6 +166,24 @@ namespace MChatSDK
             }
         }
 
+        public async Task<MChatResponseSettlement> GetSettlement(String [] settlementIds)
+        {
+            MChatRequestSettlement requestBody = new MChatRequestSettlement(settlementIds);
+            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/transaction/settlement/get", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponseSettlement mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlement>(responseBody);
+                return mChatResponse;
+            }
+            else
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                MChatResponseSettlement mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlement>(responseBody);
+                return mChatResponse;
+            }
+        }
+
         public async Task<MChatResponseTransactionList> GetTransactionList(int page, int count)
         {
             return await this.GetTransactionList(page, count, null);
@@ -177,7 +212,6 @@ namespace MChatSDK
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
                 MChatResponseTransactionDetail mChatResponse = JsonConvert.DeserializeObject<MChatResponseTransactionDetail>(responseBody);
                 return mChatResponse;
             }
