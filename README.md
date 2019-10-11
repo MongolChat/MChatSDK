@@ -39,7 +39,7 @@ ArrayList products = new ArrayList();
 products.Add(new MChatProduct("Coca Cola", 100, 1));
 products.Add(new MChatProduct("Hiam", 1000, 1));
 receipt.products = products;
-MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "token"));
+MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "token", "ref_number", new String[] { "settlement_id1", "settlement_id2" }));
 ```
 
 Гүйлгээнд НӨАТ-ын мэдээлэлийг хавсаргах
@@ -64,7 +64,7 @@ ArrayList products = new ArrayList();
 products.Add(new MChatProduct("Coca Cola", 100, 1));
 products.Add(new MChatProduct("Hiam", 1000, 1));
 receipt.products = products;
-MChatResponseGenerateQRCode responseGenerateQRCode = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false)); // dynamicLink үүсгэхийг хүсвэл true утга явуулна
+MChatResponseGenerateQRCode responseGenerateQRCode = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false, "ref_number", new String[] { "settlement_id1", "settlement_id2" })); // dynamicLink үүсгэхийг хүсвэл true утга явуулна
 ```
 
 Хэрэглэгч уншуулж болох QR код гарган `notification service` - тэй холбогдон төлбөр төлөгдсөн эсхийг мэдэх.
@@ -81,7 +81,7 @@ ArrayList products = new ArrayList();
 products.Add(new MChatProduct("Coca Cola", 100, 1));
 products.Add(new MChatProduct("Hiam", 1000, 1));
 receipt.products = products;
-MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
+MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false, "ref_number", new String[] { "settlement_id1", "settlement_id2" }), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
 {
     if (state == BNSState.Ready)
     {
@@ -108,6 +108,12 @@ MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MC
 });
 ```
 
+Гүйлгээг reference_number - аар шалгах
+
+```c#
+MChatResponse checkTransactionByRefResponse = await client.CheckTransactionByRefNumber("ref_number");
+```
+
 Хэрэглэгчид харуулсан QR кодны статусийг шалгах
 
 ```c#
@@ -124,4 +130,10 @@ MChatResponseTransactionList responseTransactionList = await client.GetTransacti
 
 ```c#
 MChatResponseTransactionDetail responseTransactionDetail = await client.GetTransactionDetail("IBNK-563101");
+```
+
+Settlement - ийн мэдээлэл авах
+
+```c#
+MChatResponseSettlement settlementResponse = await client.GetSettlement(new String[] {  "settlement_id1", "settlement_id2" });
 ```
