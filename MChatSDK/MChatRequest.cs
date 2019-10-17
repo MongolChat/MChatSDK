@@ -78,6 +78,9 @@ namespace MChatSDK
         [JsonProperty("tag")]
         private String tag = "";
 
+        [JsonProperty("branch_id")]
+        public String branch_id = "";
+
         [JsonProperty("total_price")]
         private double totalPrice;
         [JsonProperty("products")]
@@ -99,10 +102,11 @@ namespace MChatSDK
         [JsonProperty("settlement_ids")]
         private String [] settlementIds = new String[]{};
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String tag, String refNumber, String [] settlementIds)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String tag, String branchId, String refNumber, String [] settlementIds)
         {
-            this.tag = tag;
+            this.tag = tag == null ? "" : tag;
             this.withDynamicLink = withDynamicLink;
+            this.branch_id = branchId == null ? "" : branchId;
 
             this.totalPrice = receipt.totalPrice;
             this.products = receipt.products;
@@ -112,21 +116,26 @@ namespace MChatSDK
             this.nhat = receipt.nhat;
             this.ttd = receipt.ttd;
             this.billID = receipt.billId;
-            this.refNumber = refNumber;
-            this.settlementIds = settlementIds;
+            this.refNumber = refNumber == null ? "" : refNumber;
+            this.settlementIds = settlementIds == null ? new String[] { } : settlementIds;
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber, String[] settlementIds) : this(receipt, withDynamicLink, "", refNumber, settlementIds)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber, String[] settlementIds) : this(receipt, withDynamicLink, null, null, refNumber, settlementIds)
         {
 
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber) : this(receipt, withDynamicLink, "", refNumber, new String[] {})
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String branchId, String refNumber, String[] settlementIds) : this(receipt, withDynamicLink, null, branchId, refNumber, settlementIds)
         {
 
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink) : this(receipt, withDynamicLink, "", "", new String[] {})
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber) : this(receipt, withDynamicLink, null, null, refNumber, new String[] {})
+        {
+
+        }
+
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink) : this(receipt, withDynamicLink, null, null, null, null)
         {
 
         }
@@ -145,6 +154,8 @@ namespace MChatSDK
         public String token = "";
         [JsonProperty("tag")]
         public String tag = "";
+        [JsonProperty("branch_id")]
+        public String branch_id = "";
 
         [JsonProperty("total_price")]
         public double totalPrice;
@@ -167,10 +178,11 @@ namespace MChatSDK
         [JsonProperty("settlement_ids")]
         private String[] settlementIds = new String[] { };
 
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String tag, String refNumber, String[] settlementIds)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String tag, String branchId, String refNumber, String[] settlementIds)
         {
             this.token = token;
-            this.tag = tag;
+            this.tag = tag == null ? "" : tag;
+            this.branch_id = branchId == null ? "" : branchId;
 
             this.totalPrice = receipt.totalPrice;
             this.products = receipt.products;
@@ -179,14 +191,19 @@ namespace MChatSDK
             this.noat = receipt.noat;
             this.nhat = receipt.nhat;
             this.ttd = receipt.ttd;
-            this.refNumber = refNumber;
-            this.settlementIds = settlementIds;
+            this.refNumber = refNumber == null ? "" : refNumber;
+            this.settlementIds = settlementIds == null ? new String[] { } : settlementIds; 
         }
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String refNumber, String[] settlementId) : this(receipt, token, "", refNumber, settlementId)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String refNumber, String[] settlementId) : this(receipt, token, null, null, refNumber, settlementId)
         {
 
         }
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token) : this(receipt, token, "", "", new String[] { })
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String branchId, String refNumber, String[] settlementId) : this(receipt, token, null, branchId, refNumber, settlementId)
+        {
+
+        }
+
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token) : this(receipt, token, null, null, null, null)
         {
 
         }
