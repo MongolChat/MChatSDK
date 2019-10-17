@@ -63,7 +63,7 @@ namespace MChatSDK
 
         public override string ToString()
         {
-            return base.ToString() + "\transactionID: " + transactionID;
+            return base.ToString() + "\ntransactionID: " + transactionID;
         }
     }
 
@@ -77,7 +77,7 @@ namespace MChatSDK
 
         public override string ToString()
         {
-            return base.ToString() + "\nstatus: " + status + "\transactionID: " + transactionID;
+            return base.ToString() + "\nstatus: " + status + "\ntransactionID: " + transactionID;
         }
     }
 
@@ -217,7 +217,7 @@ namespace MChatSDK
         public Double refundTransactionCount;
         public override string ToString()
         {
-            return base.ToString() + "\ntotal: " + total + "\transactionCount: " + transactionCount + "\ntotalRefund: " + totalRefund + "\nrefundTransactionCount: " + refundTransactionCount;
+            return base.ToString() + "\ntotal: " + total + "\ntransactionCount: " + transactionCount + "\ntotalRefund: " + totalRefund + "\nrefundTransactionCount: " + refundTransactionCount;
         }
     }
 }
