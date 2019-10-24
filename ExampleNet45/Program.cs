@@ -91,14 +91,14 @@ namespace ExampleNet45
             //    await Task.Delay(1200000);
             //});
             //t1.Wait();
-            MChatWorkerConfiguration.Instance.Configure("1rWWASBspGSVdbGE+I9QHGt4Sse644Box5Haj7sBQJQ=", MChatWorkerConfiguration.MChatWorkerType.MChatWorkerKey, "8660bb3ef61fa597a1fe1b92ebe83315fc76dd46d52506f50b188ba5cbfd669f");
-            //MChatWorkerConfiguration.Instance.Configure("7QhJgkkjStjue8SIsWVqQD2EMgRm8CzsPifTVhm4Q0M=", MChatWorkerConfiguration.MChatWorkerType.MChatWorkerKey, "1bcc1e71123a255541923661aab62a7fa7a17b607045320ce05c04de400566f7");
+            //MChatWorkerConfiguration.Instance.Configure("1rWWASBspGSVdbGE+I9QHGt4Sse644Box5Haj7sBQJQ=", MChatWorkerConfiguration.MChatWorkerType.MChatWorkerKey, "8660bb3ef61fa597a1fe1b92ebe83315fc76dd46d52506f50b188ba5cbfd669f");
+            MChatWorkerConfiguration.Instance.Configure("7QhJgkkjStjue8SIsWVqQD2EMgRm8CzsPifTVhm4Q0M=", MChatWorkerConfiguration.MChatWorkerType.MChatWorkerKey, "1bcc1e71123a255541923661aab62a7fa7a17b607045320ce05c04de400566f7");
             Console.WriteLine(MChatWorkerConfiguration.Instance.showInfo);
             MChatWorkerClient client = new MChatWorkerClient();
             var t1 = Task.Run(async () =>
             {
                 MChatRequestReceipt receipt = new MChatRequestReceipt();
-                receipt.totalPrice = 20;
+                receipt.totalPrice = 500;
                 receipt.title = "Laviva";
                 receipt.subTitle = "Welcome to Laviva";
                 receipt.noat = "20";
@@ -108,7 +108,7 @@ namespace ExampleNet45
                 products.Add(new MChatProduct("Coca Cola", 100, 1));
                 products.Add(new MChatProduct("Hiam", 1000, 1));
                 receipt.products = products;
-                //MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false, "windows4", new String[] { "IS", "munkhuu2" }), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
+                //MChatResponseGenerateQRCode response = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false, "MUNHUU", "windows12", new String[] { "IS", "munkhuu2" }), (MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse res) =>
                 //{
                 //    if (state == BNSState.Ready)
                 //    {
@@ -147,7 +147,7 @@ namespace ExampleNet45
                 //});
                 //Console.WriteLine(response.ToString());
                 //DEWA-211973
-                //MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "651096209132526398", "window3", new String[] { "IS", "munkhuu2" }));
+                //MChatResponseChargeByQRCode responseCharge = await client.ChargeByQRCode(new MChatRequestChargeByQRCode(receipt, "651096209132526398", "","window3", new String[] { "IS", "munkhuu2" }));
                 //Console.WriteLine(responseCharge.ToString());
                 //MChatResponseGenerateQRCode responseGenerateQRCode = await client.GeneratePaymentQRCode(new MChatRequestGenerateQRCode(receipt, false));
                 //Console.WriteLine(responseGenerateQRCode.ToString());

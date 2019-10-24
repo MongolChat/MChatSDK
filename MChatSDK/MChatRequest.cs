@@ -248,8 +248,18 @@ namespace MChatSDK
 
         [JsonProperty("settlement_ids")]
         private String[] settlementIds = new String[] { };
+        [JsonProperty("start_date")]
+        private DateTime startDate = DateTime.Today;
+        [JsonProperty("end_date")]
+        private DateTime endDate = DateTime.Now;
+        public MChatRequestSettlement(String[] settlementIds, DateTime startDate, DateTime endDate)
+        {
+            this.settlementIds = settlementIds;
+            this.startDate = startDate;
+            this.endDate = endDate;
+        }
 
-        public MChatRequestSettlement(String [] settlementIds)
+        public MChatRequestSettlement(String [] settlementIds) : this(settlementIds, DateTime.Today, DateTime.Now)
         {
             this.settlementIds = settlementIds;
         }
