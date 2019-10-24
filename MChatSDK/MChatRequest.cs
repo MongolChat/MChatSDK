@@ -252,11 +252,17 @@ namespace MChatSDK
         private DateTime startDate = DateTime.Today;
         [JsonProperty("end_date")]
         private DateTime endDate = DateTime.Now;
-        public MChatRequestSettlement(String[] settlementIds, DateTime startDate, DateTime endDate)
+        public MChatRequestSettlement(String[] settlementIds, Nullable<DateTime> startDate, Nullable<DateTime> endDate)
         {
             this.settlementIds = settlementIds;
-            this.startDate = startDate;
-            this.endDate = endDate;
+            if (startDate != null)
+            {
+                this.startDate = (DateTime)startDate;
+            }
+            if (endDate != null)
+            {
+                this.endDate = (DateTime)endDate;
+            }
         }
 
         public MChatRequestSettlement(String [] settlementIds) : this(settlementIds, DateTime.Today, DateTime.Now)

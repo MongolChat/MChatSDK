@@ -166,9 +166,9 @@ namespace MChatSDK
             }
         }
 
-        public async Task<MChatResponseSettlement> GetSettlement(String [] settlementIds)
+        public async Task<MChatResponseSettlement> GetSettlement(String [] settlementIds, Nullable<DateTime> startDate, Nullable<DateTime> endDate)
         {
-            MChatRequestSettlement requestBody = new MChatRequestSettlement(settlementIds);
+            MChatRequestSettlement requestBody = new MChatRequestSettlement(settlementIds, startDate, endDate);
             var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/transaction/settlement/get", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
