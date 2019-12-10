@@ -100,6 +100,7 @@ namespace MChatSDK
         public MChatScanPayment(MChatScanPaymentBuilder configBuilder)
         {
             this.configBuilder = configBuilder;
+            httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Add("Authorization", "WorkerKey " + this.configBuilder.workerKey);
             httpClient.DefaultRequestHeaders.Add("Api-Key", this.configBuilder.apiKey);
             MChatBusinessNotificationServiceBuilder builder = new MChatBusinessNotificationServiceBuilder();
