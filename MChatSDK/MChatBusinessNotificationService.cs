@@ -66,7 +66,7 @@ namespace MChatSDK
             {
                 client = new TcpClient(configBuilder.domain, configBuilder.port);
                 nwStream = new SslStream(client.GetStream());
-                nwStream.AuthenticateAsClient(configBuilder.domain);
+                nwStream.AuthenticateAsClient(configBuilder.domain, null, System.Security.Authentication.SslProtocols.Default | System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls11, false);
                 String packetData = "";
                 while (true)
                 {
