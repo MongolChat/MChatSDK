@@ -205,19 +205,13 @@ namespace MChatSDK
         }
     }
 
-    public class MChatResponseSettlement : MChatResponse
+    public class MChatResponseSettlementUpload : MChatResponse
     {
-        [JsonProperty("total")]
-        public double total;
-        [JsonProperty("transaction_count")]
-        public int transactionCount;
-        [JsonProperty("total_refund")]
-        public Double totalRefund;
-        [JsonProperty("refund_transaction_count")]
-        public Double refundTransactionCount;
+        [JsonProperty("failed")]
+        public String[] failed;
         public override string ToString()
         {
-            return base.ToString() + "\ntotal: " + total + "\ntransactionCount: " + transactionCount + "\ntotalRefund: " + totalRefund + "\nrefundTransactionCount: " + refundTransactionCount;
+            return base.ToString() + "\nfailed: " + failed.Length;
         }
     }
 }

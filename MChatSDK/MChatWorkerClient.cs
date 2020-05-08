@@ -13,7 +13,7 @@ namespace MChatSDK
     {
         private static readonly bool env_test = false;
         private static readonly HttpClient httpClient = new HttpClient();
-        private static readonly String domain = env_test ? "test.mongolchat.com" : "developer.mongolchat.com";
+        private static readonly String domain = env_test ? "test.mongolchat.com/v2" : "developer.mongolchat.com/v2";
 
         public delegate void StateChanged(MChatWorkerClient scanPayment, BNSState state, String generatedQRCode, String dynamicLink, MChatResponse response);
 
@@ -32,9 +32,8 @@ namespace MChatSDK
                 httpClient.DefaultRequestHeaders.Add("Authorization", "WorkerKey " + MChatWorkerConfiguration.Instance.authorization);
             }
             httpClient.DefaultRequestHeaders.Add("Api-Key", MChatWorkerConfiguration.Instance.apiKey);
-
             MChatBusinessNotificationServiceBuilder builder = new MChatBusinessNotificationServiceBuilder();
-            builder.domain = env_test ? "test.mongolchat.com" : "biznot.mongolchat.com";
+            builder.domain = env_test ? "local.mongolchat.com" : "biznot.mongolchat.com";
             builder.port = 8790;
             builder.apiKey = MChatWorkerConfiguration.Instance.apiKey;
             builder.timeout = MChatWorkerConfiguration.Instance.bnsTimeout == 0 ? 120000 : MChatWorkerConfiguration.Instance.bnsTimeout;
@@ -43,7 +42,7 @@ namespace MChatSDK
 
         public async Task<MChatResponseChargeByQRCode> ChargeByQRCode(MChatRequestChargeByQRCode chargeQRCodeBody)
         {
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/chargeByQR", new StringContent(chargeQRCodeBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/chargeByQR", new StringContent(chargeQRCodeBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -60,7 +59,7 @@ namespace MChatSDK
 
         public async Task<MChatResponseGenerateQRCode> GeneratePaymentQRCode(MChatRequestGenerateQRCode generateQRCodeBody)
         {
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/onlineqr/generate", new StringContent(generateQRCodeBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/onlineqr/generate", new StringContent(generateQRCodeBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -78,7 +77,8 @@ namespace MChatSDK
         public async Task<MChatResponseGenerateQRCode> GeneratePaymentQRCode(MChatRequestGenerateQRCode generateQRCodeBody, StateChanged bnsStateChanged)
         {
             this.stateChanged = bnsStateChanged;
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/onlineqr/generate", new StringContent(generateQRCodeBody.json(), Encoding.UTF8, "application/json"));
+            Console.WriteLine(generateQRCodeBody.json());
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/onlineqr/generate", new StringContent(generateQRCodeBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -95,7 +95,7 @@ namespace MChatSDK
         }
         public async Task<MChatResponseCheckTransactionByRefNumber> CheckTransactionByRefNumber(String referenceNumber)
         {
-            var response = await httpClient.GetAsync("https://" + domain + "/v1/api/worker/transaction/check/ref/" + referenceNumber);
+            var response = await httpClient.GetAsync("https://" + domain + "/api/worker/transaction/check/ref/" + referenceNumber);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -116,7 +116,7 @@ namespace MChatSDK
             {
                 qrCode = generatedQRCode
             };
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/onlineqr/status", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/onlineqr/status", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -133,7 +133,7 @@ namespace MChatSDK
 
         public async Task<MChatResponse> UpdateTransaction(MChatRequestUpdateTransaction requestBody)
         {
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/update/transaction", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/update/transaction", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -151,7 +151,7 @@ namespace MChatSDK
         public async Task<MChatResponse> RefundTransaction(String transactionID)
         {
             MChatRequestRefundTransaction requestBody = new MChatRequestRefundTransaction(transactionID);
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/transaction/refund", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/transaction/refund", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -166,20 +166,19 @@ namespace MChatSDK
             }
         }
 
-        public async Task<MChatResponseSettlement> GetSettlement(String [] settlementIds, Nullable<DateTime> startDate, Nullable<DateTime> endDate)
+        public async Task<MChatResponseSettlementUpload> SettleUpload(MChatRequestSettleUpload requestBody)
         {
-            MChatRequestSettlement requestBody = new MChatRequestSettlement(settlementIds, startDate, endDate);
-            var response = await httpClient.PostAsync("https://" + domain + "/v1/api/worker/transaction/settlement/get", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
+            var response = await httpClient.PostAsync("https://" + domain + "/api/worker/settle/upload", new StringContent(requestBody.json(), Encoding.UTF8, "application/json"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                MChatResponseSettlement mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlement>(responseBody);
+                MChatResponseSettlementUpload mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlementUpload>(responseBody);
                 return mChatResponse;
             }
             else
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                MChatResponseSettlement mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlement>(responseBody);
+                MChatResponseSettlementUpload mChatResponse = JsonConvert.DeserializeObject<MChatResponseSettlementUpload>(responseBody);
                 return mChatResponse;
             }
         }
@@ -191,7 +190,7 @@ namespace MChatSDK
 
         public async Task<MChatResponseTransactionList> GetTransactionList(int page, int count, String tag)
         {
-            var response = await httpClient.GetAsync("https://" + domain + "/v1/api/worker/transaction/list?page=" + page + "&count=" + count + (tag != null ? ("&tag=" + tag) : ""));
+            var response = await httpClient.GetAsync("https://" + domain + "/api/worker/transaction/list?page=" + page + "&count=" + count + (tag != null ? ("&tag=" + tag) : ""));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -208,7 +207,7 @@ namespace MChatSDK
 
         public async Task<MChatResponseTransactionDetail> GetTransactionDetail(String transactionID)
         { 
-            var response = await httpClient.GetAsync("https://" + domain + "/v1/api/worker/transaction/detail/" + transactionID);
+            var response = await httpClient.GetAsync("https://" + domain + "/api/worker/transaction/detail/" + transactionID);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();

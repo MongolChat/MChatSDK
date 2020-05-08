@@ -47,7 +47,7 @@ namespace MChatSDK
 
     public class MChatRequestReceipt
     {
-        public double totalPrice;
+        public double amount;
         public ArrayList products = new ArrayList();
         public String title = "";
         public String subTitle = "";
@@ -75,14 +75,16 @@ namespace MChatSDK
 
         [JsonProperty("dynamic_link")]
         private Boolean withDynamicLink = false;
+        [JsonProperty("dynamic_link_callback")]
+        private String withDynamicLinkCallback = "";
         [JsonProperty("tag")]
         private String tag = "";
 
         [JsonProperty("branch_id")]
         public String branch_id = "";
 
-        [JsonProperty("total_price")]
-        private double totalPrice;
+        [JsonProperty("amount")]
+        private double amount;
         [JsonProperty("products")]
         private ArrayList products = new ArrayList();
         [JsonProperty("title")]
@@ -99,16 +101,15 @@ namespace MChatSDK
         private String billID = "";
         [JsonProperty("reference_number")]
         private String refNumber = "";
-        [JsonProperty("settlement_ids")]
-        private String [] settlementIds = new String[]{};
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String tag, String branchId, String refNumber, String [] settlementIds)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String withDynamicLinkCallback, String tag, String branchId, String refNumber)
         {
             this.tag = tag == null ? "" : tag;
             this.withDynamicLink = withDynamicLink;
+            this.withDynamicLinkCallback = withDynamicLinkCallback;
             this.branch_id = branchId == null ? "" : branchId;
 
-            this.totalPrice = receipt.totalPrice;
+            this.amount = receipt.amount;
             this.products = receipt.products;
             this.title = receipt.title;
             this.subTitle = receipt.subTitle;
@@ -117,30 +118,24 @@ namespace MChatSDK
             this.ttd = receipt.ttd;
             this.billID = receipt.billId;
             this.refNumber = refNumber == null ? "" : refNumber;
-            this.settlementIds = settlementIds == null ? new String[] { } : settlementIds;
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber, String[] settlementIds) : this(receipt, withDynamicLink, null, null, refNumber, settlementIds)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, String refNumber) : this(receipt, false, "",null, null, refNumber)
         {
 
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String branchId, String refNumber, String[] settlementIds) : this(receipt, withDynamicLink, null, branchId, refNumber, settlementIds)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, String branchId, String refNumber) : this(receipt, false, "", null, branchId, refNumber)
         {
 
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String refNumber) : this(receipt, withDynamicLink, null, null, refNumber, new String[] {})
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink, String withDynamicLinkCallback) : this(receipt, withDynamicLink, withDynamicLinkCallback, null, null, null)
         {
 
         }
 
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt, Boolean withDynamicLink) : this(receipt, withDynamicLink, null, null, null, null)
-        {
-
-        }
-
-        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt) : this(receipt, false)
+        public MChatRequestGenerateQRCode(MChatRequestReceipt receipt) : this(receipt, false, "")
         {
 
         }
@@ -157,8 +152,8 @@ namespace MChatSDK
         [JsonProperty("branch_id")]
         public String branch_id = "";
 
-        [JsonProperty("total_price")]
-        public double totalPrice;
+        [JsonProperty("amount")]
+        public double amount;
         [JsonProperty("products")]
         public ArrayList products = new ArrayList();
         [JsonProperty("title")]
@@ -175,16 +170,14 @@ namespace MChatSDK
         public String billID = "";
         [JsonProperty("reference_number")]
         private String refNumber = "";
-        [JsonProperty("settlement_ids")]
-        private String[] settlementIds = new String[] { };
 
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String tag, String branchId, String refNumber, String[] settlementIds)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String tag, String branchId, String refNumber) 
         {
             this.token = token;
             this.tag = tag == null ? "" : tag;
             this.branch_id = branchId == null ? "" : branchId;
 
-            this.totalPrice = receipt.totalPrice;
+            this.amount = receipt.amount;
             this.products = receipt.products;
             this.title = receipt.title;
             this.subTitle = receipt.subTitle;
@@ -192,18 +185,17 @@ namespace MChatSDK
             this.nhat = receipt.nhat;
             this.ttd = receipt.ttd;
             this.refNumber = refNumber == null ? "" : refNumber;
-            this.settlementIds = settlementIds == null ? new String[] { } : settlementIds; 
         }
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String refNumber, String[] settlementId) : this(receipt, token, null, null, refNumber, settlementId)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String refNumber) : this(receipt, token, null, null, refNumber)
         {
 
         }
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String branchId, String refNumber, String[] settlementId) : this(receipt, token, null, branchId, refNumber, settlementId)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token, String branchId, String refNumber) : this(receipt, token, null, branchId, refNumber)
         {
 
         }
 
-        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token) : this(receipt, token, null, null, null, null)
+        public MChatRequestChargeByQRCode(MChatRequestReceipt receipt, String token) : this(receipt, token, null, null, null)
         {
 
         }
@@ -243,31 +235,27 @@ namespace MChatSDK
         }
     }
 
-    public class MChatRequestSettlement : MChatRequest
+    public class MChatRequestSettlementTransaction : MChatRequest
     {
+        [JsonProperty("reference_number")]
+        private String reference_number = "";
+        [JsonProperty("amount")]
+        private double amount;
 
-        [JsonProperty("settlement_ids")]
-        private String[] settlementIds = new String[] { };
-        [JsonProperty("start_date")]
-        private DateTime startDate = DateTime.Today;
-        [JsonProperty("end_date")]
-        private DateTime endDate = DateTime.Now;
-        public MChatRequestSettlement(String[] settlementIds, Nullable<DateTime> startDate, Nullable<DateTime> endDate)
+        public MChatRequestSettlementTransaction(String reference_number, double amount)
         {
-            this.settlementIds = settlementIds;
-            if (startDate != null)
-            {
-                this.startDate = (DateTime)startDate;
-            }
-            if (endDate != null)
-            {
-                this.endDate = (DateTime)endDate;
-            }
+            this.reference_number = reference_number;
+            this.amount = amount;
         }
+    }
 
-        public MChatRequestSettlement(String [] settlementIds) : this(settlementIds, DateTime.Today, DateTime.Now)
+    public class MChatRequestSettleUpload : MChatRequest
+    {
+        [JsonProperty("transactions")]
+        private ArrayList transactions = new ArrayList();
+        public MChatRequestSettleUpload(ArrayList transactions)
         {
-            this.settlementIds = settlementIds;
+            this.transactions = transactions;
         }
     }
 }
