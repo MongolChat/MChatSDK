@@ -209,9 +209,11 @@ namespace MChatSDK
     {
         [JsonProperty("failed")]
         public String[] failed;
+        [JsonProperty("success")]
+        public String[] success;
         public override string ToString()
         {
-            return base.ToString() + "\nfailed: " + failed.Length;
+            return base.ToString() + "\nfailed: " + failed.Length + "\nsuccess:" + success.Length;
         }
     }
 }
