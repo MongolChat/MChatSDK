@@ -103,6 +103,7 @@ namespace MChatSDK
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Add("Authorization", "WorkerKey " + this.configBuilder.workerKey);
             httpClient.DefaultRequestHeaders.Add("Api-Key", this.configBuilder.apiKey);
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
             MChatBusinessNotificationServiceBuilder builder = new MChatBusinessNotificationServiceBuilder();
             builder.domain = "biznot.mongolchat.com";
             builder.port = 8790;

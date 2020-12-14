@@ -24,6 +24,7 @@ namespace MChatSDK
         public MChatWorkerClient ()
         {
             MChatWorkerConfiguration.Instance.CheckIsConfigured();
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
             if (MChatWorkerConfiguration.Instance.workerType == MChatWorkerConfiguration.MChatWorkerType.MChatWorkerBasic)
             {
                 httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + MChatWorkerConfiguration.Instance.authorization);
